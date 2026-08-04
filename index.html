@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEGİ Workspace | made by B3rou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #121215; 
+            --card-bg: #1a1a1e; 
+            --border-color: #2e2e36;
+            --text-main: #e4e4e7; 
+            --text-muted: #94a3b8;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 100px 20px 60px 20px; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(18, 18, 21, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            box-sizing: border-box;
+            z-index: 900;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .nav-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            opacity: 0.6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        .container { 
+            max-width: 800px; 
+            width: 100%; 
+            transition: max-width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .container.wide-mode {
+            max-width: 1000px;
+        }
+
+        .hidden { display: none !important; }
+
+        .card { 
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .menu-grid .card {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            padding: 1.25rem;
+        }
+        
+        .menu-grid .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.2);
+            background: #202026;
+        }
+
+        .card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .menu-grid h2 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            color: #fff;
+        }
+        
+        .menu-grid p {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 2;
+            color: var(--text-muted);
+        }
+
+        .card-bg-glow {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.2;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .menu-grid .card:hover .card-bg-glow {
+            opacity: 0.4;
+        }
+
+        h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: -0.025em;
+            color: #f1f5f9;
+        }
+
+        h2 { 
+            font-size: 1.2rem; 
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.75rem; 
+            color: #f1f5f9;
+        }
+
+        p { 
+            color: var(--text-muted); 
+            line-height: 1.5; 
+            margin: 0 0 1rem 0; 
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .btn:hover { background: var(--accent-hover); color: white; }
+
+        .btn-secondary {
+            background: #25252b;
+            border: 1px solid #3f3f46;
+            color: var(--text-main);
+            margin-top: 0.5rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        .btn-secondary:hover { background: #32323b; color: white; }
+
+        /* --- TEST İÇİ GİZLİ GRAFİK PANELİ (EASTER EGG) --- */
+        .analytics-panel {
+            background: #17171c;
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 120px;
+            padding-top: 15px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 4px;
+        }
+        .chart-bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+            position: relative;
+        }
+        .chart-bar {
+            width: 100%;
+            background: var(--accent);
+            border-radius: 3px 3px 0 0;
+            transition: height 0.3s ease, background 0.2s;
+            position: relative;
+        }
+        .chart-bar.preview {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 1;
+            opacity: 0.6;
+            border: 1px dashed #ffffff88;
+            box-sizing: border-box;
+            border-radius: 3px 3px 0 0;
+            transition: height 0.3s ease;
+        }
+        .chart-bar:hover { filter: brightness(1.2); }
+        
+        .chart-bar:hover::after {
+            content: attr(data-score);
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #25252b;
+            color: #fff;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            z-index: 10;
+        }
+        .chart-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            height: 48px;
+            text-align: left;
+        }
+
+        /* --- OYUN EKRANLARI --- */
+        .game-screen { text-align: center; padding-top: 1rem; }
+        
+        #game-onedio, #game-crisis { transition: all 0.3s ease; }
+        #game-onedio.show-stats, #game-crisis.show-stats {
+            display: flex;
+            gap: 1.5rem;
+            align-items: stretch;
+            text-align: left;
+        }
+        .test-container {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #game-onedio.show-stats .analytics-panel, #game-crisis.show-stats .analytics-panel {
+            display: block;
+            width: 300px;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+        #game-onedio.show-stats .game-card, #game-crisis.show-stats .game-card { flex: 1; }
+        
+        @media (max-width: 768px) {
+            #game-onedio.show-stats, #game-crisis.show-stats { flex-direction: column; }
+            #game-onedio.show-stats .analytics-panel, #game-crisis.show-stats .analytics-panel { width: 100%; box-sizing: border-box; }
+            .container.wide-mode { max-width: 100%; }
+            
+            /* Mobile Adjustments */
+            body { padding-top: 85px; padding-left: 15px; padding-right: 15px; }
+            .navbar { padding: 0 15px; height: 65px; }
+            .nav-brand { font-size: 1.1rem; gap: 4px; flex-direction: column; align-items: flex-start; justify-content: center; line-height: 1.2; }
+            .nav-subtitle { font-size: 0.65rem; }
+            .nav-links { gap: 15px; }
+            .nav-links a { font-size: 0.85rem; }
+            .game-card, .card { padding: 1.25rem; }
+            h1 { font-size: 1.75rem !important; }
+        }
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .action-buttons { display: flex; gap: 10px; }
+        .btn-swipe-left { background: #f87171; color: #121215; flex: 1; }
+        .btn-swipe-right { background: #4ade80; color: #121215; flex: 1; }
+        .back-btn { background: transparent; border: 1px solid #3f3f46; color: var(--text-muted); margin-top: 1rem; }
+        .back-btn:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
+
+        /* --- HAUNTED MOD (TOZLU RAFLAR) --- */
+        .archive-section { display: none; margin-top: 40px; }
+        body.haunted { background: #0a0a0a; color: #4ade80; font-family: 'Courier New', monospace; }
+        body.haunted::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+            pointer-events: none; z-index: 999;
+        }
+        body.haunted .main-section { opacity: 0.15; filter: grayscale(100%); pointer-events: none; }
+        body.haunted .archive-section:not(.hidden) { display: block !important; }
+        body.haunted .card { background: #050505; border: 1px dashed #4ade80; border-radius: 0; box-shadow: none; position: relative; }
+        body.haunted h1, body.haunted h2, body.haunted p { color: #4ade80; }
+        body.haunted .btn { background: transparent; border: 1px solid #4ade80; color: #4ade80; border-radius: 0; }
+        
+        .rejected-stamp {
+            position: absolute; top: 10px; right: -10px; color: #dc2626;
+            border: 3px solid #dc2626; padding: 4px 12px; font-weight: 900;
+            font-size: 1.2rem; transform: rotate(-20deg); opacity: 0.8;
+        }
+        
+        .trigger { text-align: center; margin-top: 3rem; opacity: 0.3; font-size: 0.75rem; cursor: pointer; }
+
+        /* Glitch Geçiş Efekti */
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-4px, 4px) }
+            40% { transform: translate(-4px, -4px) }
+            60% { transform: translate(4px, 4px) }
+            80% { transform: translate(4px, -4px) }
+            100% { transform: translate(0) }
+        }
+        .glitch-anim { animation: glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite; filter: invert(100%); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Component -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span onclick="showHome()" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#fff'">MEGİ Workspace</span>
+            <span class="nav-subtitle">made by <a href="https://github.com/B3rou" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='inherit'">B3rou</a></span>
+        </div>
+        <div class="nav-links">
+            <a href="#" id="nav-home" class="active" onclick="showHome()">Ana Sayfa</a>
+            <a href="#" id="nav-yayinlar" onclick="showYayinlar()">Yayınlananlar</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Global Modal Component -->
+        <div id="latest-modal" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index: 1000; display:flex; justify-content:center; align-items:center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+            <div style="background:var(--card-bg); border: 1px solid var(--accent); padding:2.5rem; border-radius:16px; max-width:400px; text-align:center; position:relative; box-shadow: 0 10px 40px rgba(96, 165, 250, 0.2); margin: 20px;">
+                <span style="position:absolute; top:-12px; right:-12px; background:#f43f5e; color:white; font-size:0.75rem; font-weight:bold; padding:6px 12px; border-radius:20px; box-shadow:0 2px 8px rgba(244,63,94,0.4);">YENİ EKLENDİ</span>
+                <div style="font-size: 3rem; margin-bottom: 10px;">✨</div>
+                <h2 style="margin-top:0; color:var(--text-main); font-size:1.4rem;">Oryantasyon Fikirleri</h2>
+                <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:2rem; line-height:1.5;">Sanırım son eklediğim Oryantasyon Haftası oyunlarını ve planlarını arıyordun. Doğrudan o panoya gitmek ister misin?</p>
+                
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-secondary" style="flex:1; margin-top:0; text-align:center; padding: 0.75rem;" onclick="closeModal()">Hayır, Ana Sayfa</button>
+                    <button class="btn" style="flex:1; padding: 0.75rem;" onclick="goToLatest()">Evet, Oraya Git</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Landing Page -->
+        <div id="landing-page" class="main-section">
+            <h1 style="font-size: 2.2rem; margin-bottom: 1rem; background: -webkit-linear-gradient(#60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kişisel Kulüp Arşivi</h1>
+            <p style="text-align:center; font-size: 0.95rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 2.5rem auto; line-height: 1.6; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 12px; border: 1px dashed var(--border-color);">
+                Bu platform, kulüp içi süreçleri daha verimli yönetmek, fikirleri dijital bir arşivde toplamak ve hızlıca prototiplere dökebilmek amacıyla şahsi kullanımım için tasarlanmıştır. Arka planda siteyi rahat güncelleyebildiğim için bu yöntemi tercih ettim.
+            </p>
+            
+            <h3 style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 500;">Son Eklenenler</h3>
+            <div class="menu-grid" style="grid-template-columns: 1fr; max-width: 350px; margin: 0 auto;">
+                <div class="card" onclick="enterArchive('oryantasyon')">
+                    <div class="card-bg-glow" style="background: #60a5fa;"></div>
+                    <div class="card-icon">🚀</div>
+                    <h2>Oryantasyon Panosu</h2>
+                    <p>Oryantasyon haftası için hazırlanan etkileşimli fikirler, konseptler ve oyun prototipleri.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Published Projects -->
+        <div id="yayinlananlar-page" class="main-section hidden">
+            <h1 style="font-size: 2rem; margin-bottom: 0.5rem; text-align: center;">Yayınlananlar</h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 2.5rem;">Tüm proje, fikir ve etkinlik panolarının dijital arşivi.</p>
+            
+            <div class="menu-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+                <div class="card" onclick="enterArchive('oryantasyon')">
+                    <div class="card-bg-glow" style="background: #60a5fa;"></div>
+                    <div class="card-icon">🚀</div>
+                    <h2>Oryantasyon Panosu</h2>
+                    <p>Oryantasyon haftası için hazırlanan etkileşimli fikirler, konseptler ve oyun prototipleri.</p>
+                </div>
+                <!-- İleride buraya başka panolar eklenecek -->
+            </div>
+        </div>
+
+        <!-- View: Orientation Board -->
+        <div id="main-menu" class="main-section hidden">
+            <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Oryantasyon Standı</h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 2rem;">Yeni gelen öğrencilere sunacağımız etkileşimli oyunlar ve fikirler. Oyunlar prototiptir, fikirler ise hamdır. Temel olarak fikri en iyi şekilde göstermek için kısaca hazırlanmışlardır.</p>
+            
+            <div class="menu-grid">
+                <div class="card" onclick="showPitch('tinder')">
+                    <div class="card-bg-glow" style="background: #f43f5e;"></div>
+                    <div class="card-icon">🔥</div>
+                    <h2>Startup Tinder</h2>
+                    <p>Girişim fikirlerini kaydır, vizyonunu test et.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('crisis')">
+                    <div class="card-bg-glow" style="background: #f59e0b;"></div>
+                    <div class="card-icon">🚨</div>
+                    <h2>Kriz Yönetimi</h2>
+                    <p>Senaryoları çöz, departmanını öğren.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('onedio')">
+                    <div class="card-bg-glow" style="background: #8b5cf6;"></div>
+                    <div class="card-icon">😎</div>
+                    <h2>Kafadengin Kim?</h2>
+                    <p>5 soruda kulüpteki kankanı buluyoruz!</p>
+                </div>
+
+                <div class="card" onclick="showPitch('wall')">
+                    <div class="card-bg-glow" style="background: #ec4899;"></div>
+                    <div class="card-icon">📌</div>
+                    <h2>Wall of Shame</h2>
+                    <p>En saçma startup fikirleri panosu.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('takas')">
+                    <div class="card-bg-glow" style="background: #3b82f6;"></div>
+                    <div class="card-icon">🔄</div>
+                    <h2>Takas Zinciri</h2>
+                    <p>Bir kalemle başlayıp eşya büyütme oyunu.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('arg')">
+                    <div class="card-bg-glow" style="background: #6b7280;"></div>
+                    <div class="card-icon">🕵️‍♂️</div>
+                    <h2>Kampüs Gizemi</h2>
+                    <p>Kampüs çapında zincirleme bulmaca oyunu.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('capsule')">
+                    <div class="card-bg-glow" style="background: #06b6d4;"></div>
+                    <div class="card-icon">⏳</div>
+                    <h2>Zaman Kapsülü</h2>
+                    <p>4 yıl sonra açılacak mezuniyet mektupları.</p>
+                </div>
+
+                <div class="card" onclick="showPitch('newspaper')">
+                    <div class="card-bg-glow" style="background: #d97706;"></div>
+                    <div class="card-icon">📰</div>
+                    <h2>MEGİ Gazetesi</h2>
+                    <p>Geçen senenin en komik olayları gazetesi.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Pitch Details -->
+        <div id="pitch-screen" class="game-screen hidden">
+            <h2 id="pitch-title" style="color:var(--accent); font-size:1.6rem; margin-bottom:1.5rem;">Başlık</h2>
+            <div class="game-card" style="text-align:left;">
+                <h3 style="margin-top:0; color:var(--text-main); font-size:1.1rem;">💡 Fikir</h3>
+                <p id="pitch-desc" style="color:var(--text-muted);"></p>
+                
+                <h3 style="color:var(--text-main); margin-top:1.5rem; font-size:1.1rem;">🎯 Nasıl Sunarız?</h3>
+                <p id="pitch-presentation" style="color:var(--text-muted);"></p>
+                
+                <div id="pitch-visual" style="display:none; margin-top:1.5rem;"></div>
+            </div>
+            
+            <button id="pitch-start-btn" class="btn" style="display:none; margin-bottom:10px;">Prototipi Oyna</button>
+            <button class="btn back-btn" onclick="showMenu()" style="margin-top:0;">Menüye Dön</button>
+        </div>
+
+        <!-- Module: Startup Tinder Game -->
+        <div id="game-tinder" class="game-screen hidden">
+            <h2 style="color:var(--text-main)">Startup Tinder</h2>
+            
+            <div id="tinder-gameplay">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 10px; color:var(--text-muted); font-size:0.9rem;">
+                    <span>Bütçe: <strong id="tinder-total-budget" style="color:#4ade80;">100.000$</strong></span>
+                    <span id="tinder-progress">1/5</span>
+                </div>
+                
+                <div class="game-card" id="tinder-text" style="text-align:center; min-height: 80px; display:flex; align-items:center; justify-content:center;">Uber, ama kedi kumları için.</div>
+                
+                <div style="display:flex; align-items:center; justify-content:center; gap: 15px; margin-bottom: 15px; background:var(--card-bg); padding:10px; border-radius:10px; border:1px solid var(--border-color);">
+                    <div style="font-size:0.85rem; color:var(--text-muted);">Yatırım:</div>
+                    <button class="btn" style="width:40px; padding:5px; background:#3f3f46; color:#fff;" onclick="adjustBet(-10000)">-</button>
+                    <div id="tinder-bet-amount" style="font-weight:bold; width:70px; text-align:center;">10.000$</div>
+                    <button class="btn" style="width:40px; padding:5px; background:#3f3f46; color:#fff;" onclick="adjustBet(10000)">+</button>
+                </div>
+
+                <div class="action-buttons" id="tinder-actions">
+                    <button class="btn btn-swipe-left" onclick="nextTinder(false)">Çöp</button>
+                    <button class="btn btn-swipe-right" onclick="nextTinder(true)">Yatırım Yap</button>
+                </div>
+            </div>
+            
+            <div id="tinder-results" class="hidden" style="text-align:left;"></div>
+            
+            <button class="btn back-btn" onclick="showMenu()">Menüye Dön</button>
+        </div>
+
+        <!-- Module: Crisis Management Game -->
+        <div id="game-crisis" class="game-screen hidden">
+            <div class="test-container">
+                <h2 id="crisisTitle" style="color:var(--text-main); margin-bottom: 2px; cursor: pointer; user-select: none;" title="Easter egg için 3 kez tıkla">Kriz Yönetimi</h2>
+                <p id="crisis-progress" style="margin-top: 0; font-size: 0.8rem;">Senaryo 1/4</p>
+                <div class="game-card" id="crisis-text" style="font-weight: 500;"></div>
+                <div id="crisis-actions"></div>
+                <button class="btn back-btn" onclick="showMenu()">Menüye Dön</button>
+            </div>
+            
+            <div id="crisisAnalyticsPanel" class="analytics-panel">
+                <p style="text-align:center; font-size:0.8rem; color:var(--accent); margin-bottom:8px; font-weight:600;">📊 Anlık Skor Matrisi (Easter Egg)</p>
+                <div class="chart-container" id="crisisChartContainer"></div>
+            </div>
+        </div>
+
+        <!-- Module: Personality Quiz -->
+        <div id="game-onedio" class="game-screen hidden">
+            <div class="test-container">
+                <h2 id="onedioTitle" style="color:var(--text-main); margin-bottom: 2px; cursor: pointer; user-select: none;" title="Easter egg için 3 kez tıkla">YK Testi</h2>
+                <p id="onedio-progress" style="margin-top: 0; font-size: 0.8rem;">Soru 1/5</p>
+                <div class="game-card" id="onedio-text" style="font-weight: 500;"></div>
+                <div id="onedio-actions"></div>
+                <button class="btn back-btn" onclick="showMenu()">Menüye Dön</button>
+            </div>
+            
+            <div id="analyticsPanel" class="analytics-panel">
+                <p style="text-align:center; font-size:0.8rem; color:var(--accent); margin-bottom:8px; font-weight:600;">📊 Anlık Skor Matrisi (Easter Egg)</p>
+                <div class="chart-container" id="chartContainer"></div>
+            </div>
+        </div>
+
+        <!-- View: Archive Section -->
+        <div class="archive-section">
+            <h1>[!] ARCHIVE_LOGS</h1>
+            <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 2rem;">Yapılabilir olup bazı engellerden dolayı elenen fikirlerdir.</p>
+            
+            <div class="card" style="transform: rotate(1.5deg); position: relative;">
+                <div class="rejected-stamp">REJECTED</div>
+                <h2>Loot Box / Gacha</h2>
+                <p>> STATUS: Lojistik kabusu.</p>
+                <button class="btn" onclick="startGame('lootbox')">> run_archive.exe</button>
+            </div>
+
+            <div class="card" style="transform: rotate(-1deg); position: relative; margin-top: 20px;">
+                <div class="rejected-stamp">REJECTED</div>
+                <h2>Prompt Battle</h2>
+                <p>> STATUS: Cihaz ve AI abonelik maliyeti patates eder.</p>
+                <button class="btn" onclick="startGame('promptbattle')">> run_archive.exe</button>
+            </div>
+
+            <div class="card" style="transform: rotate(1deg); position: relative; margin-top: 20px;">
+                <div class="rejected-stamp">REJECTED</div>
+                <h2>Plinko Oyunu</h2>
+                <p>> STATUS: Üretim maliyeti, ödül sorunu ve fazla yer kaplamasından dolayı.</p>
+                <p style="opacity: 0.7; font-size: 0.85rem; margin-top: 10px;">> PRO_LOG: Tekrar kullanılabilir bir yatırım olabilir.</p>
+                <button class="btn" style="opacity: 0.5; cursor: not-allowed;" disabled>> missing_executable_error</button>
+            </div>
+
+            <div class="card" style="transform: rotate(-1.5deg); position: relative; margin-top: 20px;">
+                <div class="rejected-stamp">REJECTED</div>
+                <h2>Ataş Ekonomisi</h2>
+                <p>> STATUS: Takip ve operasyonel iş yükü çok yüksek.</p>
+                <button class="btn" onclick="showPitch('economy')">> run_archive.exe</button>
+            </div>
+        </div>
+
+        <!-- Module: Lootbox (Archived) -->
+        <div id="game-lootbox" class="game-screen hidden" style="color:#4ade80;">
+            <h2>LootBox_Engine_v0.1</h2>
+            <div class="game-card" id="lootbox-text" style="background:#000; border:1px dashed #4ade80; text-align:center;">[ KUTU KAPALI ]</div>
+            <button class="btn" id="lootbox-btn" onclick="openLootBox()" style="background:transparent; border:1px solid #4ade80; color:#4ade80;">[ KUTUYU AÇ ]</button>
+            <button class="btn back-btn" style="border-color:#f87171; color:#f87171;" onclick="showMenu()">> abort_process</button>
+        </div>
+
+        <!-- Module: Prompt Battle (Archived) -->
+        <div id="game-promptbattle" class="game-screen hidden" style="color:#4ade80;">
+            <h2>Prompt_Battle_Engine_v0.1</h2>
+            <div class="game-card" style="background:#000; border:1px dashed #4ade80; text-align:center;">
+                <span style="color:#f87171">> ERROR: API_KEY_MISSING</span><br>
+                > Yapay zeka abonelikleri bitti.<br>
+                > Tabletin şarjı dayanmıyor.<br>
+                > (Fikir çok iyi ama lojistikten elendi.)
+            </div>
+            <button class="btn back-btn" style="border-color:#f87171; color:#f87171;" onclick="showMenu()">> abort_process</button>
+        </div>
+
+        <!-- Global Triggers -->
+        <div class="trigger" id="archiveTrigger">v0.1_sys_log</div>
+    </div>
+
+    <script>
+        // --- TEST İÇİ BAŞLIK EASTER EGG (GRAFİK TETİKLEYİCİ) ---
+        let titleClicks = 0;
+        let titleTimer;
+        document.getElementById('onedioTitle').addEventListener('click', () => {
+            titleClicks++;
+            clearTimeout(titleTimer);
+            titleTimer = setTimeout(() => titleClicks = 0, 1000);
+            
+            if (titleClicks === 3) {
+                const gameScreen = document.getElementById('game-onedio');
+                gameScreen.classList.toggle('show-stats');
+                document.querySelector('.container').classList.toggle('wide-mode', gameScreen.classList.contains('show-stats'));
+                updateChart();
+                titleClicks = 0;
+            }
+        });
+
+        // --- INITIAL LOAD & MODAL LOGIC ---
+        window.onload = () => {
+            hideAll();
+            document.getElementById('landing-page').classList.remove('hidden');
+            
+            // Show latest modal after a short delay
+            setTimeout(() => {
+                const modal = document.getElementById('latest-modal');
+                modal.style.opacity = '1';
+                modal.style.pointerEvents = 'auto';
+            }, 600);
+        };
+
+        function closeModal() {
+            const modal = document.getElementById('latest-modal');
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+        }
+
+        function goToLatest() {
+            closeModal();
+            enterArchive('oryantasyon');
+        }
+
+        function disableHauntedMode() {
+            document.body.classList.remove('haunted');
+            document.querySelector('.archive-section').classList.add('hidden');
+        }
+
+        function updateNav(activeId) {
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            if(activeId) document.getElementById(activeId).classList.add('active');
+        }
+
+        function showYayinlar() {
+            hideAll();
+            disableHauntedMode();
+            updateNav('nav-yayinlar');
+            document.getElementById('yayinlananlar-page').classList.remove('hidden');
+        }
+
+        function enterArchive(archiveName) {
+            hideAll();
+            disableHauntedMode();
+            updateNav('nav-yayinlar');
+            if(archiveName === 'oryantasyon') {
+                document.getElementById('main-menu').classList.remove('hidden');
+            }
+        }
+
+        function showHome() {
+            hideAll();
+            disableHauntedMode();
+            updateNav('nav-home');
+            document.getElementById('landing-page').classList.remove('hidden');
+        }
+
+        // --- HAUNTED MOD TETİKLEYİCİ & GLITCH EFEKTİ ---
+        let clickCount = 0; let clickTimer;
+        document.getElementById('archiveTrigger').addEventListener('click', () => {
+            // Sadece Oryantasyon panosundayken tıklanabilir olsun
+            const isOryantasyon = !document.getElementById('main-menu').classList.contains('hidden');
+            if (!isOryantasyon) return;
+
+            clickCount++;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => clickCount = 0, 1000);
+            
+            if (clickCount === 4) {
+                document.body.classList.add('glitch-anim');
+                setTimeout(() => {
+                    document.body.classList.remove('glitch-anim');
+                    document.body.classList.toggle('haunted');
+                    clickCount = 0;
+                    if(document.body.classList.contains('haunted')) {
+                        document.querySelector('.archive-section').classList.remove('hidden');
+                        setTimeout(() => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'}), 100);
+                    } else {
+                        document.querySelector('.archive-section').classList.add('hidden');
+                    }
+                }, 400);
+            }
+        });
+
+        // --- EKRAN YÖNETİMİ ---
+        function hideAll() {
+            document.querySelectorAll('.main-section, .game-screen, .archive-section').forEach(el => el.classList.add('hidden'));
+        }
+
+        function showMenu() {
+            hideAll();
+            updateNav('nav-yayinlar');
+            document.getElementById('game-onedio').classList.remove('show-stats');
+            document.getElementById('game-crisis').classList.remove('show-stats');
+            document.querySelector('.container').classList.remove('wide-mode');
+            
+            document.getElementById('main-menu').classList.remove('hidden');
+            if (document.body.classList.contains('haunted')) {
+                document.querySelector('.archive-section').classList.remove('hidden');
+            }
+            
+            document.getElementById('lootbox-text').innerText = "[ KUTU KAPALI ]";
+            document.getElementById('lootbox-btn').style.display = 'block';
+        }
+
+        const pitches = {
+            tinder: {
+                title: "Startup Tinder",
+                pitch: "Ekranda absürt veya komik girişim fikirleri belirir. Kullanıcılar sağa veya sola kaydırarak yatırımcı vizyonlarını test eder. Eğlenceli ve hızlı bir etkileşim sunar.",
+                presentation: "Kampüsün çeşitli yerlerine <b>'Senden Yatırımcı olur muydu dersin? Görelim Bakalım!'</b> yazan QR kodlar asarız. Öğrenciler okutup doğrudan bu oyuna girer.",
+                hasGame: true,
+                gameId: "tinder"
+            },
+            crisis: {
+                title: "Kriz Yönetimi Testi",
+                pitch: "Kullanıcıların karşısına kulüpte yaşanabilecek absürt kriz senaryoları çıkar. Verdikleri yanıtlara göre hangi departmana (Etkinlik, Sosyal Medya vb.) uygun olduklarını bulurlar.",
+                presentation: "Kampüs geneline <b>'Sence Hangi Departmanımıza Uyuyorsun? Kendini Test Et!'</b> yazılı QR'lar asılır. Sonucunu alan öğrenciyi standdaki o departmanın yetkilisine yönlendiririz.",
+                hasGame: true,
+                gameId: "crisis"
+            },
+            onedio: {
+                title: "YK'daki Kafadengin Kim?",
+                pitch: "5 soruluk eğlenceli bir kişilik testi. Kullanıcılar çalışma ve sosyalleşme tarzlarına göre Yönetim Kurulu'ndaki (YK) hangi isme en çok benzediklerini öğrenirler.",
+                presentation: "Standa gelen öğrencilere sohbet başlatıcı olarak kullandırılır. <b>'Sonucunu al, standdaki o kişiyi bul ve tanış!'</b> diyerek buz kırıcı (ice-breaker) bir görev verilir.",
+                hasGame: true,
+                gameId: "onedio"
+            },
+            wall: {
+                title: "Wall of Shame (Kötü Fikir Duvarı)",
+                pitch: "Standın bir köşesine dev bir boş pano kuruyoruz. İnsanlar post-it'lere en saçma, batması en garanti girişim fikirlerini yazıp asıyorlar.",
+                presentation: "Stand etrafında kahkaha ve muhabbet ortamı yaratır. Ayrıca web sitemize dijital bir pano da ekleyip oryantasyon haftasından sonra 'Wall of Shame' derlemesi olarak efsane bir sosyal medya postu çıkabiliriz.",
+                hasGame: false,
+                visual: `<div style="background:#fde68a; color:#92400e; padding:1rem; transform:rotate(-3deg); box-shadow: 2px 4px 10px rgba(0,0,0,0.15); font-family: 'Comic Sans MS', cursive, sans-serif; font-size:1.1rem; text-align:center; border-radius:2px;">
+                    "Uber, ama kedi kumları için."
+                </div>
+                <div style="background:#fbcfe8; color:#831843; padding:1rem; transform:rotate(2deg); box-shadow: 2px 4px 10px rgba(0,0,0,0.15); font-family: 'Comic Sans MS', cursive, sans-serif; font-size:1.1rem; text-align:center; border-radius:2px; margin-top: 10px;">
+                    "Tinder, ama sadece köpekler eşleşiyor."
+                </div>`
+            },
+            economy: {
+                title: "Ataş Ekonomisi (Görev Oyunu)",
+                pitch: "Oryantasyon boyunca kampüste gizli bir oyun oynuyoruz. Oyundaki paramız: Ataş! 📎",
+                presentation: "Çok basit: Kampüsün çeşitli yerlerine gizli QR kodlar asıyoruz veya kampüste 'fötr şapkalı' ajan üyelerimiz dolaşıyor.<br><br>Öğrenciler bu QR'ları okutup komik görevleri yaptıklarında veya ajanları bulduklarında onlara bir <b>'Ataş'</b> hediye ediyoruz.<br><br>Sonra ne mi oluyor? Topladıkları ataşları standımıza getirip kantinden çay, kulüp stickerı veya küçük hediyelerle takas ediyorlar. Hem okulu geziyorlar hem de eğleniyorlar!",
+                hasGame: false,
+                visual: `<div style="display:flex; justify-content:center; align-items:center; gap: 15px; margin-top: 1rem; font-size:2rem; background: var(--border-color); padding: 15px; border-radius: 12px;">
+                    🕵️‍♂️ <span>+</span> ✔️ <span>=</span> 📎 <span>➡️</span> 🎁
+                </div>`
+            },
+            takas: {
+                title: "Takas Zinciri",
+                pitch: "Sadece bir kalemle başlayıp, onu giderek daha farklı ve değerli eşyalarla takas etme oyunu!",
+                presentation: "Standın köşesinde bir masa kuruyoruz. Üstüne basit bir eşya (örneğin kulüp logolu bir kalem) koyuyoruz.<br><br>Kural çok basit: <b>'Bu eşyayı alabilirsin, ama yerine cebinden çıkan daha ilginç bir şey bırakmak zorundasın!'</b><br><br>Biri kalemi alıp yerine anahtarlık bırakır, diğeri anahtarlığı alıp kitap bırakır. Hafta boyunca masadaki eşya sürekli değişir ve standa sırf 'Şu an masada ne var?' diye bakmaya gelen dev bir kitle oluşur.",
+                hasGame: false,
+                visual: `<div style="display:flex; justify-content:center; align-items:center; gap: 10px; margin-top: 1rem; font-size:1.5rem; background: var(--border-color); padding: 15px; border-radius: 12px;">
+                    🖊️ ➡️ 🔑 ➡️ 📚 ➡️ 🎸
+                </div>`
+            },
+            arg: {
+                title: "Kampüs Gizemi (Hazine Avı)",
+                pitch: "Kampüsün çeşitli yerlerine saklanmış zincirleme puzzle'lar ve gizemler silsilesi! Kendi içinde zorluk seviyeleri olan ayrı maceralar.",
+                presentation: "Standa gelen öğrencilere ilk ipucu kağıdını veririz. Her çözülen puzzle onları kampüsteki bir sonraki gizli lokasyona yönlendirir.<br><br><b>Büyük Final:</b> En zor puzzle haftaya yayılır ve muhtemelen kimse tek başına çözemez. İnsanlar el ele verip kulüp discord'unda veya stand etrafında toplanıp beyin fırtınası yapar. Çözümü bulan kişi, haftanın son günü standda duran gizemli, kilitli kutunun şifresini girip büyük ödülü (veya efsanevi objeyi) alır!",
+                hasGame: false,
+                visual: `<div style="display:flex; justify-content:center; align-items:center; gap: 10px; margin-top: 1rem; font-size:1.5rem; background: var(--border-color); padding: 15px; border-radius: 12px;">
+                    🗺️ ➡️ 🧩 ➡️ 🔍 ➡️ 🔐
+                </div>`
+            },
+            capsule: {
+                title: "Zaman Kapsülü (Mezuniyete Mektup)",
+                pitch: "Standda şık, kilitli ve şeffaf bir 'Zaman Kapsülü' kutusu durur. Yeni gelen öğrenciler 4 yıl sonraki kendilerine mektup yazarlar.",
+                presentation: "Gelenlere bir kağıt ve kalem veririz: <b>'4 yıl sonraki kendine ne söylemek istersin? En büyük hayalin ne?'</b><br><br>Öğrenciler mektubu yazar, katlar ve kutuya atar. Onlara kulüp olarak söz veririz: Bunu 4 yıl sonraki bir etkinlikte (mezuniyet balosu olmak zorunda değil, özel bir buluşma da olabilir) hep beraber açıp okuyacağız. Yeni üyelerle aramızda inanılmaz bir manevi bağ ve sadakat kurar.",
+                hasGame: false,
+                visual: `<div style="display:flex; justify-content:center; align-items:center; gap: 10px; margin-top: 1rem; font-size:1.5rem; background: var(--border-color); padding: 15px; border-radius: 12px;">
+                    ✍️ ➡️ ✉️ ➡️ ⏳ ➡️ 🎓
+                </div>`
+            },
+            newspaper: {
+                title: "MEGİ Gazetesi (Makara Bülteni)",
+                pitch: "Geçen senenin en komik olaylarının, gaflarının, kampüs efsanelerinin ve iç şakalarımızın derlendiği tek sayfalık eğlenceli bir gazete.",
+                presentation: "Standa gelenlerin okuyabileceği (veya el ilanı gibi dağıtılabilecek) vintage tasarımlı bir 'MEGİ Gazetesi' hazırlarız.<br><br>Yeni gelenler okulu ve bizim ekibi tanımaya çok açtır. Bu gazete sayesinde bizim iç şakalarımızı, komik anılarımızı hemen öğrenirler. Sıkıcı broşürler yerine herkesin alıp okumak, hatta saklamak isteyeceği, kampüs kültürünü saniyeler içinde aşılayan vizyoner bir iştir.",
+                hasGame: false,
+                visual: `<div style="background:#fef08a; color:#854d0e; padding:1.5rem; transform:rotate(-1deg); box-shadow: 2px 4px 10px rgba(0,0,0,0.15); font-family: 'Times New Roman', serif; text-align:left; border: 2px solid #a16207; border-radius: 2px; margin-top: 10px;">
+                    <h1 style="border-bottom: 2px solid #a16207; padding-bottom: 5px; margin-top:0; font-size:1.8rem; color:#713f12; font-weight:bold; text-align:center;">MEGİ GAZETESİ</h1>
+                    
+                    <div style="font-size:0.85rem; text-align:justify; margin-bottom: 12px;">
+                        <b style="font-size:0.95rem;">🍲 Yemekhane Devrimi:</b> Eski yemekhaneden yeni yemekhaneye bu sene geçildi. Bu büyük bir devrimdi! Açık büfe sistemi ile en iyi üni yemekhanesine sahip olduk.<br><i style="color:#a16207; font-size:0.75rem;">(Tarih: 12.10.2025)</i>
+                    </div>
+                    
+                    <div style="font-size:0.85rem; text-align:justify; margin-bottom: 12px;">
+                        <b style="font-size:0.95rem;">⛲ Çeşme İzdihamı:</b> Okulun döşemeleri bu sene tamamlandı ve 2 adet çeşme yapıldı. Çeşmeler beklenenden çok daha fazla ilgi gördü: Hem öğrenciler, hem de doğal hayat tarafından!<br><i style="color:#a16207; font-size:0.75rem;">(Tarih: 04.03.2026)</i>
+                    </div>
+                    
+                    <div style="font-size:0.85rem; text-align:justify;">
+                        <b style="font-size:0.95rem;">📱 İMÜ Multiverse:</b> İnstagram'ın en canlı olduğu dönemlerden biriydi. Sosyal medya İMÜ fan hesaplarıyla çalkalandı: <i>imü shitpost, imü asansörü, imü yangın alarmı, imü fıskiyesi</i> gibi birçok topluluk hesabı baş gösterdi.
+                    </div>
+                </div>`
+            }
+        };
+
+        function showPitch(id) {
+            hideAll();
+            const data = pitches[id];
+            document.getElementById('pitch-title').innerHTML = data.title;
+            document.getElementById('pitch-desc').innerHTML = data.pitch;
+            document.getElementById('pitch-presentation').innerHTML = data.presentation;
+            
+            const visualEl = document.getElementById('pitch-visual');
+            if (data.visual) {
+                visualEl.innerHTML = data.visual;
+                visualEl.style.display = 'block';
+            } else {
+                visualEl.style.display = 'none';
+            }
+            
+            const startBtn = document.getElementById('pitch-start-btn');
+            if (data.hasGame) {
+                startBtn.style.display = 'block';
+                startBtn.onclick = () => startGame(data.gameId);
+            } else {
+                startBtn.style.display = 'none';
+            }
+            
+            document.getElementById('pitch-screen').classList.remove('hidden');
+        }
+
+        function startGame(game) {
+            hideAll();
+            document.getElementById('game-' + game).classList.remove('hidden');
+            if(game === 'onedio') startOnedio();
+            if(game === 'crisis') startCrisis();
+            if(game === 'tinder') startTinder();
+        }
+
+        // --- KRİZ YÖNETİMİ MANTIĞI ---
+        let crisisStep = 0;
+        let crisisScores = { etkinlik: 0, sosyal: 0, finans: 0, strateji: 0, uye: 0 };
+        
+        const crisisQuestions = [
+            {
+                q: "Etkinlik günü konuşmacı son anda iptal etti! Ne yaparsın?",
+                opts: [
+                    { t: "Yedek konuşmacılardan birini acil çağırırım.", s: { uye: 2, etkinlik: 1 } },
+                    { t: "Katılımcılarla interaktif bir workshop düzenlerim.", s: { etkinlik: 3 } },
+                    { t: "Sosyal medyadan durumu samimi bir dille açıklarım.", s: { sosyal: 3 } },
+                    { t: "Sponsorlarla iletişime geçip alternatif planlarım.", s: { finans: 3 } },
+                    { t: "Bütün programı hızla revize edip ekibe görev dağıtırım.", s: { strateji: 3 } }
+                ]
+            },
+            {
+                q: "Yıl sonu balosu için yeterli bütçe kalmadığını fark ettiniz.",
+                opts: [
+                    { t: "Potansiyel sponsorlara sunumlar hazırlayıp görüşürüm.", s: { finans: 3 } },
+                    { t: "Konsepti değiştirip ucuz ama yaratıcı bir parti planlarım.", s: { etkinlik: 3 } },
+                    { t: "Tüm üyelere durumu şeffafça anlatıp kampanya başlatırım.", s: { uye: 3, sosyal: 1 } },
+                    { t: "Eldeki bütçeyi en optimum şekilde Excel'de modellerim.", s: { strateji: 3 } },
+                    { t: "Twitter'da viral olacak eğlenceli bir bağış başlatırım.", s: { sosyal: 3 } }
+                ]
+            },
+            {
+                q: "Yönetim kurulunda iki fikir arasında ciddi çatışma çıktı.",
+                opts: [
+                    { t: "Artı ve eksileri tahtaya yazıp rasyonel çözüm üretirim.", s: { strateji: 3 } },
+                    { t: "Araya girip, herkesin gönlünü yapacak orta yolu bulurum.", s: { uye: 3 } },
+                    { t: "Bizi hangisi prestijli gösterecekse onu seçelim derim.", s: { sosyal: 2, finans: 1 } },
+                    { t: "Hangi fikir bütçemizi az sarsarsa oradan ilerlerim.", s: { finans: 3 } },
+                    { t: "Konuşmayı bırakıp 'Hadi deneyip görelim' diyerek aksiyona geçerim.", s: { etkinlik: 3 } }
+                ]
+            },
+            {
+                q: "Stand haftasında yeni üyeler standa hiç uğramıyor.",
+                opts: [
+                    { t: "Dev bir hoparlör ve yarışma alanı kurup herkesi toplarım.", s: { etkinlik: 3 } },
+                    { t: "Komik videolar çekerek sosyal medyadan kitle çekerim.", s: { sosyal: 3 } },
+                    { t: "Standa gelenlere sponsor hediyeleri dağıtacağımızı duyururum.", s: { finans: 3 } },
+                    { t: "Hedef kitleyi analiz edip standın stratejisini değiştiririm.", s: { strateji: 3 } },
+                    { t: "Kampüste dolaşıp insanları birebir standa davet ederim.", s: { uye: 3 } }
+                ]
+            },
+            {
+                q: "Sponsor etkinlik ürünlerini getirmeyi unuttu ve 1 saatimiz var!",
+                opts: [
+                    { t: "Marketten benzer ürünler alıp durumu geçici olarak kurtarırım.", s: { etkinlik: 3 } },
+                    { t: "Sponsoru arayıp sonraki etkinlik için telafi bütçesi koparırım.", s: { finans: 3 } },
+                    { t: "Sosyal medyadan 'Hediyelerimiz kargoda, geliyor!' diyip PR çıkarırım.", s: { sosyal: 3 } },
+                    { t: "Akışı değiştirip dağıtımı sona alarak zaman kazanırım.", s: { strateji: 3 } },
+                    { t: "Durumu dürüstçe açıklayıp katılımcılara telafi sözü veririm.", s: { uye: 3 } }
+                ]
+            },
+            {
+                q: "Çok hevesli ama tecrübesiz bir üye yönetim kurulunda görev istiyor.",
+                opts: [
+                    { t: "Uzun vadeli hedeflerimizi anlatıp gelişim planı çizerim.", s: { strateji: 3 } },
+                    { t: "Dijital ekiplere dahil edip küçük içerikler ürettiririm.", s: { sosyal: 2, strateji: 1 } },
+                    { t: "Bütçe yaratacak küçük sponsor görüşmelerine kanalize ederim.", s: { finans: 3 } },
+                    { t: "Küçük ama kritik olmayan operasyonel görevler verip sahada denerim.", s: { etkinlik: 3 } },
+                    { t: "Onunla birebir ilgilenir, işi öğrenene kadar mentorluk yaparım.", s: { uye: 3 } }
+                ]
+            },
+            {
+                q: "Genel kurulda üyelerden biri süreçlerin çok yavaş olduğundan şikayet etti.",
+                opts: [
+                    { t: "Süreçleri analiz edip iş akışını hızlandıracak sistem öneririm.", s: { strateji: 3 } },
+                    { t: "'Harika geri bildirim, bunu sosyal medyada tartışalım' derim.", s: { sosyal: 3 } },
+                    { t: "Bütçe ve sponsor onaylarının çok zaman aldığını açıklarım.", s: { finans: 3 } },
+                    { t: "'Haftaya dev bir etkinlikle bu algıyı yıkacağız!' diyerek gaz veririm.", s: { etkinlik: 3 } },
+                    { t: "Eleştiriyi kişisel almadan, yapıcı çözüm için yanına giderim.", s: { uye: 3 } }
+                ]
+            }
+        ];
+
+        const crisisProfiles = {
+            etkinlik: "<b>Etkinlik Departmanı!</b><br>Sahne senin! Sadece etkinlik anını değil, etkinlikleri haftalar öncesinden vizyoner bir şekilde kurgulamak, planlamak ve kriz anlarında pratik zekanla operasyonu yönetmek tam sana göre.",
+            sosyal: "<b>Sosyal Medya Departmanı!</b><br>Tam bir PR dehası! Trendleri yakalama ve kitleleri yönlendirme konusunda doğuştan yeteneklisin.",
+            finans: "<b>Finans ve Sponsorluk!</b><br>Muhasebenin efendisi, müzakerelerin yıldızı! Kaynak yönetimi ve ikna kabiliyetin inanılmaz.",
+            strateji: "<b>Strateji Departmanı!</b><br>Büyük resmi gören vizyoner! Analitik düşünme yeteneğinle kulübün geleceğini planlamak tam sana göre.",
+            uye: "<b>Üye İlişkileri!</b><br>İletişim sihirbazı! İnsanları birleştirme, empati kurma ve krizleri tatlı dille çözme konusunda üstünsün."
+        };
+
+        const crisisColors = {
+            etkinlik: '#f472b6',
+            sosyal: '#60a5fa',
+            finans: '#4ade80',
+            strateji: '#fbbf24',
+            uye: '#a78bfa'
+        };
+
+        let crisisTitleClicks = 0;
+        let crisisTitleTimer;
+        document.getElementById('crisisTitle').addEventListener('click', () => {
+            crisisTitleClicks++;
+            clearTimeout(crisisTitleTimer);
+            crisisTitleTimer = setTimeout(() => crisisTitleClicks = 0, 1000);
+            
+            if (crisisTitleClicks === 3) {
+                const gameScreen = document.getElementById('game-crisis');
+                gameScreen.classList.toggle('show-stats');
+                document.querySelector('.container').classList.toggle('wide-mode', gameScreen.classList.contains('show-stats'));
+                updateCrisisChart();
+                crisisTitleClicks = 0;
+            }
+        });
+
+        function startCrisis() {
+            crisisStep = 0;
+            crisisScores = { etkinlik: 0, sosyal: 0, finans: 0, strateji: 0, uye: 0 };
+            document.getElementById('crisis-actions').style.display = 'block';
+            document.getElementById('crisis-progress').style.display = 'block';
+            renderCrisisQ();
+            updateCrisisChart();
+        }
+
+        function renderCrisisQ() {
+            const textEl = document.getElementById('crisis-text');
+            const actionsEl = document.getElementById('crisis-actions');
+            const progressEl = document.getElementById('crisis-progress');
+            
+            if (crisisStep < crisisQuestions.length) {
+                progressEl.innerText = `Senaryo ${crisisStep + 1} / ${crisisQuestions.length}`;
+                const qData = crisisQuestions[crisisStep];
+                textEl.innerText = qData.q;
+                actionsEl.innerHTML = qData.opts.map((opt, i) => 
+                    `<button class="btn btn-secondary" onclick="answerCrisis(${i})" onmouseover="previewCrisisChart(${i})" onmouseout="updateCrisisChart()">` + opt.t + `</button>`
+                ).join('');
+            } else {
+                progressEl.style.display = 'none';
+                let topDept = Object.keys(crisisScores).reduce((a, b) => crisisScores[a] > crisisScores[b] ? a : b);
+                textEl.innerHTML = crisisProfiles[topDept] + "<br><br><span style='font-size:0.9rem; color:var(--accent);'>Bu departman tam sana göre, hemen yandaki yetkiliyle görüş!</span>";
+                actionsEl.style.display = 'none';
+            }
+        }
+
+        function answerCrisis(optIndex) {
+            const scores = crisisQuestions[crisisStep].opts[optIndex].s;
+            for (let key in scores) crisisScores[key] += scores[key];
+            crisisStep++;
+            renderCrisisQ();
+            updateCrisisChart();
+        }
+
+        function previewCrisisChart(optIndex) {
+            const scores = crisisQuestions[crisisStep].opts[optIndex].s;
+            updateCrisisChart(scores);
+        }
+
+        function updateCrisisChart(previewScores = {}) {
+            const container = document.getElementById('crisisChartContainer');
+            if(!container) return;
+            
+            let currentMax = 5;
+            for (let name in crisisScores) {
+                let val = crisisScores[name] + (previewScores[name] || 0);
+                if (val > currentMax) currentMax = val;
+            }
+            
+            container.innerHTML = '';
+            const labelMap = { etkinlik: "Etkinlik", sosyal: "Sosyal", finans: "Finans", strateji: "Strateji", uye: "Üye İlş." };
+            for (let name in crisisScores) {
+                const score = crisisScores[name];
+                const preview = previewScores[name] || 0;
+                const total = score + preview;
+                
+                const heightPercent = Math.max((score / currentMax) * 100, 8);
+                const previewHeightPercent = Math.max((total / currentMax) * 100, 8);
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'chart-bar-wrapper';
+                
+                let previewHtml = '';
+                if (preview > 0) {
+                    previewHtml = `<div class="chart-bar preview" style="height: ${previewHeightPercent}%; background: ${crisisColors[name]};"></div>`;
+                }
+                
+                const displayName = labelMap[name] || name;
+                wrapper.innerHTML = `
+                    <div class="bars-container" style="position:relative; flex:1; width:100%; display:flex; align-items:flex-end;">
+                        ${previewHtml}
+                        <div class="chart-bar" style="height: ${heightPercent}%; background: ${crisisColors[name]}; z-index: 2;" data-score="${displayName}: ${total}p ${preview > 0 ? '(+'+preview+')' : ''}"></div>
+                    </div>
+                    <div class="chart-label">${displayName}</div>
+                `;
+                container.appendChild(wrapper);
+            }
+        }
+
+        // --- TINDER MANTIĞI ---
+        let tinderStep = 0;
+        let tinderBudget = 100000;
+        let tinderCurrentBet = 10000;
+        let tinderInvestments = [];
+        
+        const tinderStartups = [
+            { text: "Uber, ama kedi kumları için.", minM: 0.1, maxM: 1.5, name: "Kedi Kumu Uber" },
+            { text: "Yapay Zeka destekli falcı uygulaması.", minM: 1.5, maxM: 5.0, name: "AI Falcı" },
+            { text: "Sadece eski sevgilileri eşleştiren çöpçatanlık uygulaması.", minM: 0.0, maxM: 0.5, name: "Ex-Match" },
+            { text: "Uyurken İngilizce öğreten yastık.", minM: 0.8, maxM: 2.5, name: "Dil Yastığı" },
+            { text: "Köpekler için LinkedIn ağı.", minM: 1.1, maxM: 3.0, name: "DogIn" }
+        ];
+
+        function startTinder() {
+            tinderStep = 0;
+            tinderBudget = 100000;
+            tinderCurrentBet = 10000;
+            tinderInvestments = [];
+            
+            document.getElementById('tinder-gameplay').classList.remove('hidden');
+            document.getElementById('tinder-results').classList.add('hidden');
+            
+            updateTinderUI();
+        }
+
+        function adjustBet(amount) {
+            tinderCurrentBet += amount;
+            if (tinderCurrentBet < 0) tinderCurrentBet = 0;
+            if (tinderCurrentBet > tinderBudget) tinderCurrentBet = tinderBudget;
+            document.getElementById('tinder-bet-amount').innerText = tinderCurrentBet.toLocaleString() + "$";
+        }
+
+        function updateTinderUI() {
+            if (tinderCurrentBet > tinderBudget) tinderCurrentBet = tinderBudget;
+            document.getElementById('tinder-total-budget').innerText = tinderBudget.toLocaleString() + "$";
+            document.getElementById('tinder-bet-amount').innerText = tinderCurrentBet.toLocaleString() + "$";
+            document.getElementById('tinder-progress').innerText = (tinderStep + 1) + "/" + tinderStartups.length;
+            document.getElementById('tinder-text').innerText = tinderStartups[tinderStep].text;
+        }
+
+        function nextTinder(invest) {
+            const startup = tinderStartups[tinderStep];
+            
+            if (invest && tinderCurrentBet > 0) {
+                tinderBudget -= tinderCurrentBet;
+                tinderInvestments.push({
+                    startup: startup,
+                    amount: tinderCurrentBet
+                });
+            }
+            
+            tinderStep++;
+            
+            if (tinderStep < tinderStartups.length) {
+                updateTinderUI();
+            } else {
+                finishTinder();
+            }
+        }
+
+        function finishTinder() {
+            document.getElementById('tinder-gameplay').classList.add('hidden');
+            const resultsEl = document.getElementById('tinder-results');
+            resultsEl.classList.remove('hidden');
+            
+            let totalReturn = 0;
+            let resultsHtml = `<div class="game-card">`;
+            
+            if (tinderInvestments.length === 0) {
+                resultsHtml += `<h3 style="color:#f87171; margin-top:0; text-align:center;">Melek Olmayan Yatırımcı 📉</h3>`;
+                resultsHtml += `<p style="text-align:center;">Hiçbir fikre yatırım yapmadın. Piyasadan korktun ve kasanı korudun ama vizyonsuzluktan kaybettin!</p>`;
+                resultsHtml += `<p style="text-align:center;">Kalan Bütçe: <b>${tinderBudget.toLocaleString()}$</b></p>`;
+            } else {
+                resultsHtml += `<h3 style="color:var(--accent); margin-top:0; text-align:center;">Yatırım Sonuçları 📈</h3>`;
+                resultsHtml += `<div style="font-size:0.9rem; margin-bottom:15px;">`;
+                
+                tinderInvestments.forEach(inv => {
+                    const multiplier = inv.startup.minM + Math.random() * (inv.startup.maxM - inv.startup.minM);
+                    const returned = Math.round(inv.amount * multiplier);
+                    totalReturn += returned;
+                    
+                    let color = multiplier >= 1 ? '#4ade80' : '#f87171';
+                    let sign = multiplier >= 1 ? '+' : '';
+                    let profit = returned - inv.amount;
+                    
+                    resultsHtml += `
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding: 8px 0;">
+                            <div>
+                                <div style="color:var(--text-main)"><b>${inv.startup.name}</b></div>
+                                <div style="color:var(--text-muted); font-size:0.8rem;">Yatırım: ${inv.amount.toLocaleString()}$ (x${multiplier.toFixed(2)})</div>
+                            </div>
+                            <div style="color:${color}; font-weight:bold; text-align:right;">
+                                ${returned.toLocaleString()}$<br>
+                                <span style="font-size:0.75rem;">${sign}${profit.toLocaleString()}$</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultsHtml += `</div>`;
+                const finalBudget = tinderBudget + totalReturn;
+                const totalProfit = finalBudget - 100000;
+                
+                let title = "";
+                if(finalBudget >= 200000) title = "Silikon Vadisi Kralı 👑";
+                else if(finalBudget > 100000) title = "Vizyoner Yatırımcı 🚀";
+                else title = "Batan Melek 💸";
+                
+                resultsHtml += `
+                    <div style="background:#121215; padding:15px; border-radius:8px; text-align:center;">
+                        <div style="color:var(--text-muted); font-size:0.85rem;">Ünvanın</div>
+                        <div style="font-weight:bold; margin-bottom:10px; font-size:1.2rem; color:var(--text-main);">${title}</div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px; color:var(--text-muted);">
+                            <span>Kalan Kasa:</span>
+                            <span>${tinderBudget.toLocaleString()}$</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px; color:var(--text-muted);">
+                            <span>Dönen Yatırım:</span>
+                            <span style="color:#4ade80">+${totalReturn.toLocaleString()}$</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem; border-top:1px solid #3f3f46; padding-top:10px; margin-top:10px; color:var(--text-main);">
+                            <span>Final Bakiye:</span>
+                            <span style="color:${totalProfit >= 0 ? '#4ade80' : '#f87171'}">${finalBudget.toLocaleString()}$</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultsHtml += `</div>`;
+            resultsEl.innerHTML = resultsHtml;
+        }
+
+        // --- YK TESTİ MANTIĞI ---
+        let onedioStep = 0;
+        let ykScores = { Serra: 0, Mert: 0, Emin: 0, Yağız: 0, Yağmur: 0, Berat: 0, Ceyhun: 0 };
+        
+        const onedioQuestions = [
+            {
+                q: "Etkinlik alanına ilk sen geldin. Standı kurmak lazım, ilk hamlen ne olur?",
+                opts: [
+                    { t: "A) Planlamayı açar, kimin nereye geçeceğini milimetrik hesaplarım.", s: { Serra: 3, Berat: 2 } },
+                    { t: "B) Önce masanın görsel düzenini ve afişleri ayarlarım. Tasarım önemli.", s: { Mert: 3 } },
+                    { t: "C) Gerekli teknik ve sistem altyapısını hızlıca kurup arkasından ekiple muhabbete koyulurum.", s: { Berat: 3, Mert: 2 } },
+                    { t: "D) Müzik açıp milleti gazlarım, sandalyeleri taşırken bol makara döner.", s: { Yağmur: 3, Emin: 1 } },
+                    { t: "E) Gelen giden ekiplerle hemen kaynaşır, muhabbete başlarım.", s: { Yağız: 2, Yağmur: 2, Ceyhun: 1 } }
+                ]
+            },
+            {
+                q: "Standda biri 'Siz tam olarak ne iş yapıyorsunuz?' dedi. Nasıl cevaplarsın?",
+                opts: [
+                    { t: "A) Derin bir nefes alır, vizyonumuzdan ve dev projelerimizden bahsederim.", s: { Serra: 3, Yağız: 3 } },
+                    { t: "B) Samimi bir sohbete girer, esprilerle işi pazarlarım.", s: { Ceyhun: 3, Mert: 2, Emin: 1 } },
+                    { t: "C) Gerektiğinde net bilgi verip detayını teknik ekibe/arkadaşıma paslarım.", s: { Berat: 3, Yağmur: 1 } },
+                    { t: "D) Güler yüzle sorularını cevaplar, kulüp kültürünü anlatırım.", s: { Yağmur: 3, Serra: 1 } },
+                    { t: "E) 'Biz her işi çözeriz usta' modunda özgüvenli ve rahat bir giriş yaparım.", s: { Emin: 3, Ceyhun: 1 } }
+                ]
+            },
+            {
+                q: "Etkinlikte büyük kriz çıktı, sunucu çöktü veya planlar iptal oldu! Tepkin?",
+                opts: [
+                    { t: "A) B planını, C planını çoktan hazırlamıştım. Hemen devreye sokarım.", s: { Serra: 3, Berat: 1 } },
+                    { t: "B) 'Sıkıntı yok hallederiz' der, o an pratik ve hızlı bir çözüm uydururum.", s: { Mert: 3, Emin: 1, Ceyhun: 1 } },
+                    { t: "C) Sakince durumu analiz edip teknik ya da operasyonel krize el atarım.", s: { Berat: 3, Mert: 3 } },
+                    { t: "D) Hemen insanları sakinleştirip durumu tatlı dille toparlarım.", s: { Yağmur: 3, Emin: 2, Ceyhun: 2} }
+                ]
+            },
+            {
+                q: "Boş zamanlarında kulüp odasındasın. Seni nerede buluruz?",
+                opts: [
+                    { t: "A) Yakın arkadaşlarımla koyu bir sohbetin ortasında veya masa başında.", s: { Emin: 2, Yağmur: 2, Ceyhun: 2 } },
+                    { t: "B) Ekiple Discord'da veya odada LoL, oyun atıp bol makara yaparken.", s: { Mert: 3, Emin: 3, Berat: 3 } },
+                    { t: "C) Gelen geçene çay kahve ısmarlayıp sohbet ederken.", s: { Yağmur: 2, Yağız: 2 } },
+                    { t: "D) Kulübün geleceği için sistemli planlar yaparken.", s: { Serra: 3 } }
+                ]
+            },
+            {
+                q: "Sana nasıl yapılacağı tam belli olmayan bir görev verildi. Tarzın nedir?",
+                opts: [
+                    { t: "A) Oturup en baştan sona sistematik bir süreç ve döküman hazırlarım.", s: { Serra: 3 } },
+                    { t: "B) Tasarım, teknik, pazarlama hepsini harmanlar kendi imzamı atarım.", s: { Mert: 3, Berat: 2 } },
+                    { t: "C) Kervan yolda düzülür der, girişe çıka o işi bir şekilde çözerim.", s: { Emin: 2, Ceyhun: 3 } },
+                    { t: "D) Sessizce istenen işi eksiksiz ve en güvenilir şekilde teslim eder, sonra sohbete dönerim.", s: { Yağmur: 3, Berat: 3 } }
+                ]
+            }
+        ];
+
+        const ykProfiles = {
+            Serra: "<b>Serra!</b><br>Endüstri mühendisi, vizyoner ve fazla sistemli birisin. Organizasyon senden sorulur!",
+            Mert: "<b>Mert!</b><br>Teknik, tasarım, pazarlama... Hepsini harmanlıyorsun. Akşama ekiple LoL var mı?",
+            Emin: "<b>Emin!</b><br>Tam bir kriz çözücüsün! Verilen her işi hallederken makarayı da eksik etmiyorsun.",
+            Yağız: "<b>Yağız!</b><br>Vizyoner düşüncelerin ve bol sohbetinle ekibin kalbisin. Muhabbet senden sorulur!",
+            Yağmur: "<b>Yağmur!</b><br>Hem harika sohbet ediyor hem de verilen işi tıkır tıkır, güvenilir şekilde yapıyorsun. Afferin kız sana!",
+            Berat: "<b>Berat!</b><br>Gerektiğinde lafını esirgemeyen, yakın çevresiyle koyu sohbet eden ama iş sıkışınca teknik masayı sırtlayan gizli güçsün!",
+            Ceyhun: "<b>Ceyhun!</b><br>Her krizi pratikçe çözen, verilen işi anında yapan tam bir sohbet/muhabbet adamısın! Kingo!"
+        };
+
+        function startOnedio() {
+            onedioStep = 0;
+            ykScores = { Serra: 0, Mert: 0, Emin: 0, Yağız: 0, Yağmur: 0, Berat: 0, Ceyhun: 0 };
+            document.getElementById('onedio-actions').style.display = 'block';
+            document.getElementById('onedio-progress').style.display = 'block';
+            renderOnedioQ();
+            updateChart();
+        }
+
+        function renderOnedioQ() {
+            const textEl = document.getElementById('onedio-text');
+            const actionsEl = document.getElementById('onedio-actions');
+            const progressEl = document.getElementById('onedio-progress');
+            
+            if (onedioStep < onedioQuestions.length) {
+                progressEl.innerText = `Soru ${onedioStep + 1} / 5`;
+                const qData = onedioQuestions[onedioStep];
+                textEl.innerText = qData.q;
+                actionsEl.innerHTML = qData.opts.map((opt, i) => 
+                    `<button class="btn btn-secondary" onclick="answerOnedio(${i})" onmouseover="previewChart(${i})" onmouseout="updateChart()">` + opt.t + `</button>`
+                ).join('');
+            } else {
+                progressEl.style.display = 'none';
+                let topYk = Object.keys(ykScores).reduce((a, b) => ykScores[a] > ykScores[b] ? a : b);
+                textEl.innerHTML = ykProfiles[topYk] + "<br><br><span style='font-size:0.85rem; color:var(--accent);'>Standın etrafına bak, o kişiyi bul ve yanına git!</span>";
+                actionsEl.style.display = 'none';
+            }
+        }
+
+        function answerOnedio(optIndex) {
+            const scores = onedioQuestions[onedioStep].opts[optIndex].s;
+            for (let key in scores) ykScores[key] += scores[key];
+            onedioStep++;
+            renderOnedioQ();
+            updateChart();
+        }
+
+        // --- GRAFİK GÜNCELLEME ---
+        const ykColors = {
+            Serra: '#f472b6',
+            Mert: '#60a5fa',
+            Emin: '#4ade80',
+            Yağız: '#fbbf24',
+            Yağmur: '#a78bfa',
+            Berat: '#f87171',
+            Ceyhun: '#fb923c'
+        };
+
+        function previewChart(optIndex) {
+            const scores = onedioQuestions[onedioStep].opts[optIndex].s;
+            updateChart(scores);
+        }
+
+        function updateChart(previewScores = {}) {
+            const container = document.getElementById('chartContainer');
+            if(!container) return;
+            
+            let currentMax = 5;
+            for (let name in ykScores) {
+                let val = ykScores[name] + (previewScores[name] || 0);
+                if (val > currentMax) currentMax = val;
+            }
+            
+            container.innerHTML = '';
+            for (let name in ykScores) {
+                const score = ykScores[name];
+                const preview = previewScores[name] || 0;
+                const total = score + preview;
+                
+                const heightPercent = Math.max((score / currentMax) * 100, 8);
+                const previewHeightPercent = Math.max((total / currentMax) * 100, 8);
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'chart-bar-wrapper';
+                
+                let previewHtml = '';
+                if (preview > 0) {
+                    previewHtml = `<div class="chart-bar preview" style="height: ${previewHeightPercent}%; background: ${ykColors[name]};"></div>`;
+                }
+                
+                wrapper.innerHTML = `
+                    <div class="bars-container" style="position:relative; flex:1; width:100%; display:flex; align-items:flex-end;">
+                        ${previewHtml}
+                        <div class="chart-bar" style="height: ${heightPercent}%; background: ${ykColors[name]}; z-index: 2;" data-score="${name}: ${total}p ${preview > 0 ? '(+'+preview+')' : ''}"></div>
+                    </div>
+                    <div class="chart-label">${name}</div>
+                `;
+                container.appendChild(wrapper);
+            }
+        }
+
+        function openLootBox() {
+            document.getElementById('lootbox-text').innerHTML = `
+                <span style="color:#f87171">> WARNING: FATAL ERROR</span><br>
+                > Tebrikler! 10.000 TL Kulüp Borcu çıkardın!<br>
+                > (İşte bu yüzden bu fikri eledik.)
+            `;
+            document.getElementById('lootbox-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
